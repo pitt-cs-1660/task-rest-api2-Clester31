@@ -13,9 +13,7 @@ app = FastAPI()
 
 ############################################
 # Edit the code below this line
-############################################
-conn = get_db_connection()
-cursor = conn.cursor()
+###########################################
 
 
 @app.get("/")
@@ -38,7 +36,8 @@ async def create_task(task_data: TaskCreate):
     Returns:
         TaskRead: The created task data
     """
-
+    conn = get_db_connection()
+    cursor = conn.cursor()  
 
     cursor.execute(
         "INSERT INTO tasks (title, description, completed) VALUES (?, ?, ?)",
@@ -61,6 +60,8 @@ async def get_tasks():
     Returns:
         list[TaskRead]: A list of all tasks in the database
     """
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM tasks")
     rows = cursor.fetchall()
@@ -80,6 +81,9 @@ async def update_task(task_id: int, task_data: TaskCreate):
     Returns:
         TaskRead: The updated task data
     """
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
     cursor.execute(
         "UPDATE tasks SET title = ?, description = ?, completed = ? WHERE id = ?",
@@ -102,6 +106,9 @@ async def delete_task(task_id: int):
     Returns:
         dict: A message indicating that the task was deleted successfully
     """
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
     cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
     conn.commit()
